@@ -12,14 +12,13 @@
 	
 	<Target Name="CopyDLLs" AfterTargets="Build">
 		<Message Text="DLL to V Rising Game" Importance="High" />
-		<Copy SourceFiles="$(TargetDir)$(ProjectName).dll" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\VRising\BepInEx\WetstonePlugins\" />
+		<Copy SourceFiles="$(TargetDir)$(ProjectName).dll" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\VRising\BepInEx\plugin\" />
 		<Message Text="DLL Copied OK" Importance="High" />
 	</Target>
 
   <ItemGroup>
     <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
-    <PackageReference Include="Wetstone" Version="1.1.0" />
   </ItemGroup>
 
 	<ItemGroup>

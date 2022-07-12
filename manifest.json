@@ -1,0 +1,9 @@
+﻿{
+  "name": "ChatLineColorMod",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/oscarpedrero/ChatLineColorMod",
+  "description": "MOD FOR CHANGE COLOR OF CHAT INPUT TEXT SAME AS COLOR CHANNEL IN V RISING.",
+  "dependencies": [
+    "BepInEx-BepInExPack_V_Rising-1.0.0"
+  ]
+}
