@@ -1,10 +1,11 @@
 ﻿using HarmonyLib;
-using ProjectM.Network;
 using ProjectM.UI;
-using Unity.Entities;
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
+using System;
+using ChatLineColorMod.Utils;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace ChatLineColorMod.Hooks;
 
@@ -20,6 +21,8 @@ internal class HUDChatWindow_Path
     private static Color colorWhisper = new(255 / 255f, 159 / 255f, 255 / 255f);
     private static Color colorSystem = new(228 / 255f, 141 / 255f, 40 / 255f);
     private static string lastChannel = "Local";
+    private static string pattern = @"(\:(\w|\+|\-)+\:)(?=|[\!\.\?]|$)";
+    private static string textEmoji = "";
 
     [HarmonyPatch(typeof(HUDChatWindow), nameof(HUDChatWindow.FocusInputField))]
     [HarmonyPrefix]
@@ -27,6 +30,25 @@ internal class HUDChatWindow_Path
     {
             chatLine = __instance.ChatInputField;
     }
+
+    [HarmonyPatch(typeof(ClientChatSystem), nameof(ClientChatSystem._OnInputChanged))]
+    [HarmonyPrefix]
+    public static void OnInputChanged_Prefix(ClientChatSystem __instance, string text)
+    {
+        if(text != textEmoji)
+        {
+            textEmoji = convertEmoji(text);
+        }
+        
+    }
+
+    [HarmonyPatch(typeof(ClientChatSystem), nameof(ClientChatSystem._OnInputSubmit))]
+    [HarmonyPrefix]
+    public static void OnInputSubmit_Prefix(ClientChatSystem __instance, string text)
+    {
+        textEmoji ="";
+    }
+
 
     [HarmonyPatch(typeof(ClientChatSystem), nameof(ClientChatSystem.OnUpdate))]
     [HarmonyPrefix]
@@ -37,8 +59,14 @@ internal class HUDChatWindow_Path
 
         lastChannel = channel;
 
+        
+
         if (chatLine != null)
         {
+
+            chatLine.textComponent.text = textEmoji;
+            chatLine.text = textEmoji;
+
             if (channel == "Local")
             {
                
@@ -65,7 +93,36 @@ internal class HUDChatWindow_Path
             }
         }
 
-        
+    }
 
+    public static string convertEmoji(string text)
+    {
+        RegexOptions options = RegexOptions.IgnoreCase | RegexOptions.Multiline;
+
+        Emoji oEmoji = new();
+
+        text = Emoji.convertCharactersToEoji(text);
+
+        foreach (Match m in Regex.Matches(text, pattern, options))
+        {
+            string property = stringUpper(m.Value.Replace(":", ""));
+            try
+            {
+                string emojiVal = Convert.ToString(typeof(Emoji).GetField(property).GetValue(oEmoji));
+                text = text.Replace(m.Value, emojiVal);
+            }
+            catch
+            {
+                //Plugin.Logger.LogInfo($"Not found '{property}'.");
+            }
+            
+        }
+
+        return text;
+    }
+
+    public static string stringUpper(string str)
+    {
+        return string.Join("_", str.Split('_').Select(str => char.ToUpper(str[0]) + str.Substring(1)));
     }
 }

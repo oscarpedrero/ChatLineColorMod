@@ -6,8 +6,10 @@ using System.Reflection;
 
 namespace ChatLineColorMod
 {
+
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-    [BepInDependency("xyz.molenzwiebel.wetstone")]
+    //[BepInDependency("xyz.molenzwiebel.wetstone")]
+    //[Reloadable]
     public class Plugin : BasePlugin
     {
         public static ManualLogSource Logger;
