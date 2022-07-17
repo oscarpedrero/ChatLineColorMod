@@ -6,6 +6,10 @@ using System;
 using ChatLineColorMod.Utils;
 using System.Text.RegularExpressions;
 using System.Linq;
+using Unity.Entities;
+using ProjectM;
+using ProjectM.Network;
+using Wetstone.API;
 
 namespace ChatLineColorMod.Hooks;
 
@@ -15,6 +19,8 @@ internal class HUDChatWindow_Path
 
     private static TMP_InputField chatLine = null;
 
+    private static EntityManager entityManager = VWorld.Client.EntityManager;
+
     private static Color colorLocal = new(218 / 255f, 201 / 255f, 192 / 255f);
     private static Color colorGLobal = new(153 / 255f, 204 / 255f, 255 / 255f);
     private static Color colorTeam = new(121 / 255f, 218 / 255f, 166 / 255f);
@@ -22,44 +28,111 @@ internal class HUDChatWindow_Path
     private static Color colorSystem = new(228 / 255f, 141 / 255f, 40 / 255f);
     private static string lastChannel = "Local";
     private static string pattern = @"(\:(\w|\+|\-)+\:)(?=|[\!\.\?]|$)";
-    private static string textEmoji = "";
+    private static string textEmoji = $"";
+    private static bool insertChannel = false;
+    private static bool isWhisp = false;
+    private static string whispTo = "";
 
     [HarmonyPatch(typeof(HUDChatWindow), nameof(HUDChatWindow.FocusInputField))]
     [HarmonyPrefix]
-    public static void FocusInputField_Prefix(HUDChatWindow __instance)
+    public static void FocusInputField_Postfix(HUDChatWindow __instance)
     {
-            chatLine = __instance.ChatInputField;
+        chatLine = __instance.ChatInputField;
     }
 
     [HarmonyPatch(typeof(ClientChatSystem), nameof(ClientChatSystem._OnInputChanged))]
     [HarmonyPrefix]
-    public static void OnInputChanged_Prefix(ClientChatSystem __instance, string text)
+    public static void OnInputChanged_Prefix(ClientChatSystem __instance, ref string text)
     {
         if(text != textEmoji)
         {
+            /*if (text.Contains("/w") || text.Contains("/W"))
+            {
+                if(!isWhisp)
+                {
+                    text = text.Replace($"/w", "");
+                    text = text.Replace($"/W", "");
+                    text = text.Replace($"[{lastChannel}]: ", "/w ");
+                    isWhisp = true;
+                }
+            }
+            else
+            {*/
+                if(lastChannel == "Whisper")
+                {
+                    if (!text.Contains($"[{whispTo}]: "))
+                    {
+                        isWhisp = false;
+                        if (insertChannel)
+                        {
+                            text = $"[{whispTo}]: ";
+                        }
+                        else
+                        {
+                            text = text.Insert(0, $"[{whispTo}]: ");
+                            insertChannel = true;
+
+                        }
+                    }
+                } else
+                {
+                    if (!text.Contains($"[{lastChannel}]: "))
+                    {
+                        isWhisp = false;
+                        if (insertChannel)
+                        {
+                            text = $"[{lastChannel}]: ";
+                        }
+                        else
+                        {
+                            text = text.Insert(0, $"[{lastChannel}]: ");
+                            insertChannel = true;
+
+                        }
+                    }
+                }
+                
+            //}
             textEmoji = convertEmoji(text);
+
         }
-        
+ 
     }
 
     [HarmonyPatch(typeof(ClientChatSystem), nameof(ClientChatSystem._OnInputSubmit))]
     [HarmonyPrefix]
-    public static void OnInputSubmit_Prefix(ClientChatSystem __instance, string text)
+    public static void OnInputSubmit_Prefix(ClientChatSystem __instance, ref string text)
     {
-        textEmoji ="";
+        textEmoji = $"";
+        isWhisp = false;
+        if (lastChannel == "Whisper")
+        {
+            text = text.Replace($"[{whispTo}]:", "");
+        }
+        else
+        {
+            text = text.Replace($"[{lastChannel}]:", "");
+        }
+            
+        insertChannel = false;
     }
 
 
     [HarmonyPatch(typeof(ClientChatSystem), nameof(ClientChatSystem.OnUpdate))]
     [HarmonyPrefix]
-    public static void CheckedState_Prefix(ClientChatSystem __instance)
+    public static void CheckedState_PrefixAsync(ClientChatSystem __instance)
     {
 
         var channel = __instance._DefaultMode.ToString();
 
-        lastChannel = channel;
-
         
+
+        if(channel != lastChannel)
+        {
+            textEmoji = textEmoji.Replace(lastChannel, channel);
+            lastChannel = channel;
+        }
+            
 
         if (chatLine != null)
         {
@@ -69,27 +142,38 @@ internal class HUDChatWindow_Path
 
             if (channel == "Local")
             {
-               
                 chatLine.textComponent.color = colorLocal;
+                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
             }
             else if (channel == "Global")
             {
-                
                 chatLine.textComponent.color = colorGLobal;
+                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
             }
             else if (channel == "Team")
             {
-                
                 chatLine.textComponent.color = colorTeam;
+                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
             }
             else if (channel == "Whisper")
             {
+                try
+                {
+                    var netWorkId = __instance._WhisperUser;
+                    __instance.TryGetUserCharacterName(netWorkId, out string userName);
+                    whispTo = userName;
+                } catch
+                {
+                    whispTo = "Whisper";
+                }
                 
                 chatLine.textComponent.color = colorWhisper;
+                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
             }
             else if (channel == "System")
             {
                 chatLine.textComponent.color = colorSystem;
+                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
             }
         }
 
