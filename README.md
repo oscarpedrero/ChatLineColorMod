@@ -1,5 +1,10 @@
-﻿# ChatLineColorMod
+﻿## ChatLineColorMod
+
 A client mod that adds channel name and change the color of the chat input text as the color of the cannel where you are typing. It also replace text string with emojis.
+
+## Channel Name - New featured
+
+ Adds channel name in the chat input where you are typing.
 
 ![alt text](https://github.com/oscarpedrero/ChatLineColorMod/blob/master/imgs/local.png?raw=true)
 
@@ -11,7 +16,7 @@ A client mod that adds channel name and change the color of the chat input text 
 
 ![alt text](https://github.com/oscarpedrero/ChatLineColorMod/blob/master/imgs/system.PNG?raw=true)
 
-## Emojis - New Featured
+## Emojis
 
 Now replace string to emoticons:
 
