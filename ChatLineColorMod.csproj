@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>ChatLineColorMod</AssemblyName>
-    <Description>A mod for change color of chat input same as color channel and replace string to Emoji in V Rising</Description>
-    <Version>1.1.0</Version>
+    <Description>A client mod that adds channel name and change the color of the chat input text as the color of the cannel where you are typing. It also replace text string with emojis.</Description>
+    <Version>1.2.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
 	<UnhollowedDllPath>C:\Program Files (x86)\Steam\steamapps\common\VRising\BepInEx\unhollowed</UnhollowedDllPath>
@@ -12,7 +12,7 @@
 	
 	<Target Name="CopyDLLs" AfterTargets="Build">
 		<Message Text="DLL to V Rising Game" Importance="High" />
-		<Copy SourceFiles="$(TargetDir)$(ProjectName).dll" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\VRising\BepInEx\WetstonePlugins\" />
+		<Copy SourceFiles="$(TargetDir)$(ProjectName).dll" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\VRising\BepInEx\plugins\" />
 		<Message Text="DLL Copied OK" Importance="High" />
 	</Target>
 	
@@ -27,7 +27,6 @@
   <ItemGroup>
     <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
-    <PackageReference Include="Wetstone" Version="1.1.0" />
   </ItemGroup>
 
 	<ItemGroup>

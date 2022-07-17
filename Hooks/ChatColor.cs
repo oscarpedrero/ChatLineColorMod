@@ -9,7 +9,6 @@ using System.Linq;
 using Unity.Entities;
 using ProjectM;
 using ProjectM.Network;
-using Wetstone.API;
 
 namespace ChatLineColorMod.Hooks;
 
@@ -18,8 +17,6 @@ internal class HUDChatWindow_Path
 {
 
     private static TMP_InputField chatLine = null;
-
-    private static EntityManager entityManager = VWorld.Client.EntityManager;
 
     private static Color colorLocal = new(218 / 255f, 201 / 255f, 192 / 255f);
     private static Color colorGLobal = new(153 / 255f, 204 / 255f, 255 / 255f);
@@ -30,7 +27,6 @@ internal class HUDChatWindow_Path
     private static string pattern = @"(\:(\w|\+|\-)+\:)(?=|[\!\.\?]|$)";
     private static string textEmoji = $"";
     private static bool insertChannel = false;
-    private static bool isWhisp = false;
     private static string whispTo = "";
 
     [HarmonyPatch(typeof(HUDChatWindow), nameof(HUDChatWindow.FocusInputField))]
@@ -46,23 +42,10 @@ internal class HUDChatWindow_Path
     {
         if(text != textEmoji)
         {
-            /*if (text.Contains("/w") || text.Contains("/W"))
-            {
-                if(!isWhisp)
-                {
-                    text = text.Replace($"/w", "");
-                    text = text.Replace($"/W", "");
-                    text = text.Replace($"[{lastChannel}]: ", "/w ");
-                    isWhisp = true;
-                }
-            }
-            else
-            {*/
                 if(lastChannel == "Whisper")
                 {
                     if (!text.Contains($"[{whispTo}]: "))
                     {
-                        isWhisp = false;
                         if (insertChannel)
                         {
                             text = $"[{whispTo}]: ";
@@ -78,7 +61,6 @@ internal class HUDChatWindow_Path
                 {
                     if (!text.Contains($"[{lastChannel}]: "))
                     {
-                        isWhisp = false;
                         if (insertChannel)
                         {
                             text = $"[{lastChannel}]: ";
@@ -91,8 +73,6 @@ internal class HUDChatWindow_Path
                         }
                     }
                 }
-                
-            //}
             textEmoji = convertEmoji(text);
 
         }
@@ -104,7 +84,6 @@ internal class HUDChatWindow_Path
     public static void OnInputSubmit_Prefix(ClientChatSystem __instance, ref string text)
     {
         textEmoji = $"";
-        isWhisp = false;
         if (lastChannel == "Whisper")
         {
             text = text.Replace($"[{whispTo}]:", "");
