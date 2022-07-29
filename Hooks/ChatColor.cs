@@ -73,7 +73,15 @@ internal class HUDChatWindow_Path
                         }
                     }
                 }
-            textEmoji = convertEmoji(text);
+
+            if (Plugin.EmojiEnabled.Value)
+            {
+                textEmoji = convertEmoji(text);
+            } else
+            {
+                textEmoji = text;
+            }
+            
 
         }
  

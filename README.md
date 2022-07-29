@@ -1,6 +1,4 @@
-﻿## ChatLineColorMod
-
-A client mod that adds channel name and change the color of the chat input text as the color of the cannel where you are typing. It also replace text string with emojis.
+﻿A client mod that adds channel name and change the color of the chat input text as the color of the cannel where you are typing. It also replace text string with emojis.
 
 ## Channel Name - New featured
 
@@ -17,6 +15,17 @@ A client mod that adds channel name and change the color of the chat input text 
 ![alt text](https://github.com/oscarpedrero/ChatLineColorMod/blob/master/imgs/system.PNG?raw=true)
 
 ## Emojis
+
+To activate this functionality you can do it through the configuration file of the mod `BepInEx\config`
+
+```
+[Emojis]
+
+## Enable Emojis replace
+# Setting type: Boolean
+# Default value: true
+enabled = true
+```
 
 Now replace string to emoticons:
 
