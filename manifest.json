@@ -1,6 +1,6 @@
 ﻿{
   "name": "ChatLineColorMod",
-  "version_number": "1.3.2",
+  "version_number": "1.3.3",
   "website_url": "https://github.com/oscarpedrero/ChatLineColorMod",
   "description": "A client mod that adds channel name and change the color of the chat input text as the color of the channel where you are typing, AutoClean Chat Window and replace text string with emojis.",
   "dependencies": [

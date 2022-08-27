@@ -101,7 +101,7 @@ public class HUDChatWindow_Path
     public static void OnInputSubmit_Prefix(ClientChatSystem __instance, ref string text)
     {
         textEmoji = $"";
-        if (Plugin.ChatColorEnabled.Value)
+        if (Plugin.ChatChannelEnabled.Value)
         {
             if (lastChannel == "Whisper")
             {

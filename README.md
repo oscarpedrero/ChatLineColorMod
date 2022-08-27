@@ -7,7 +7,7 @@ Once the mod installed, a configuration file will be created in the \BepInEx\con
 **ChatLineColorMod.cfg**
 
 ```
-## Settings file was created by plugin ChatLineColorMod v1.3.2
+## Settings file was created by plugin ChatLineColorMod v1.3.3
 ## Plugin GUID: ChatLineColorMod
 
 [AutoCleanChat]
