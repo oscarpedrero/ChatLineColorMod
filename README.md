@@ -1,6 +1,51 @@
 ﻿A client mod that adds channel name and change the color of the chat input text as the color of the cannel where you are typing. It also replace text string with emojis.
 
-## Channel Name - New featured
+## Configuration
+
+Once the mod installed, a configuration file will be created in the \BepInEx\config client folder where you can activate or desactivate any of the mod functions.
+
+**ChatLineColorMod.cfg**
+
+```
+## Settings file was created by plugin ChatLineColorMod v1.3.0
+## Plugin GUID: ChatLineColorMod
+
+[AutoCleanChat]
+
+## Enable AutoCleanChat replace
+# Setting type: Boolean
+# Default value: true
+enabled = true
+
+## Time interval in seconds in which the chat is cleared
+# Setting type: Int32
+# Default value: 3600
+interval = 60
+
+[ChatColor]
+
+## Enable adds channel name and change the color of the chat input text as the color of the cannel where you are typing
+# Setting type: Boolean
+# Default value: true
+enabled = true
+
+[Emojis]
+
+## Enable Emojis replace
+# Setting type: Boolean
+# Default value: true
+enabled = true
+```
+
+
+|SECTION|PARAM| DESCRIPTION                                                     | DEFAULT
+|----------------|-------------------------------|-----------------------------------------------------------------|-----------------------------|
+|AutoCleanChat|`enabled `            | Enable AutoCleanChat replace              | true
+|AutoCleanChat        |`interval`            | Time interval in seconds in which the chat is cleared | 3600
+|ChatColor|`enabled `| Enable adds channel name and change the color of the chat input text as the color of the channel where you are typing.                  |true
+|Emojis|`enabled `| Enable Emojis replace                               |true
+
+## Channel Name
 
  Adds channel name in the chat input where you are typing.
 
@@ -15,17 +60,6 @@
 ![alt text](https://github.com/oscarpedrero/ChatLineColorMod/blob/master/imgs/system.PNG?raw=true)
 
 ## Emojis
-
-To activate this functionality you can do it through the configuration file of the mod `BepInEx\config`
-
-```
-[Emojis]
-
-## Enable Emojis replace
-# Setting type: Boolean
-# Default value: true
-enabled = true
-```
 
 Now replace string to emoticons:
 

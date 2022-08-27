@@ -13,10 +13,12 @@ using ProjectM.Network;
 namespace ChatLineColorMod.Hooks;
 
 [HarmonyPatch]
-internal class HUDChatWindow_Path
+public class HUDChatWindow_Path
 {
 
     private static TMP_InputField chatLine = null;
+
+    public static bool clearChat { get; set; } = false;
 
     private static Color colorLocal = new(218 / 255f, 201 / 255f, 192 / 255f);
     private static Color colorGLobal = new(153 / 255f, 204 / 255f, 255 / 255f);
@@ -40,9 +42,12 @@ internal class HUDChatWindow_Path
     [HarmonyPrefix]
     public static void OnInputChanged_Prefix(ClientChatSystem __instance, ref string text)
     {
-        if(text != textEmoji)
+        
+        if (Plugin.ChatColorEnabled.Value)
         {
-                if(lastChannel == "Whisper")
+            if (text != textEmoji)
+            {
+                if (lastChannel == "Whisper")
                 {
                     if (!text.Contains($"[{whispTo}]: "))
                     {
@@ -57,7 +62,8 @@ internal class HUDChatWindow_Path
 
                         }
                     }
-                } else
+                }
+                else
                 {
                     if (!text.Contains($"[{lastChannel}]: "))
                     {
@@ -73,18 +79,21 @@ internal class HUDChatWindow_Path
                         }
                     }
                 }
+            }
+        }
 
-            if (Plugin.EmojiEnabled.Value)
+        if (Plugin.EmojiEnabled.Value)
+        {
+            if (text != textEmoji)
             {
                 textEmoji = convertEmoji(text);
-            } else
-            {
-                textEmoji = text;
             }
-            
-
         }
- 
+        else
+        {
+            textEmoji = text;
+        }
+
     }
 
     [HarmonyPatch(typeof(ClientChatSystem), nameof(ClientChatSystem._OnInputSubmit))]
@@ -92,16 +101,19 @@ internal class HUDChatWindow_Path
     public static void OnInputSubmit_Prefix(ClientChatSystem __instance, ref string text)
     {
         textEmoji = $"";
-        if (lastChannel == "Whisper")
+        if (Plugin.ChatColorEnabled.Value)
         {
-            text = text.Replace($"[{whispTo}]:", "");
+            if (lastChannel == "Whisper")
+            {
+                text = text.Replace($"[{whispTo}]:", "");
+            }
+            else
+            {
+                text = text.Replace($"[{lastChannel}]:", "");
+            }
+
+            insertChannel = false;
         }
-        else
-        {
-            text = text.Replace($"[{lastChannel}]:", "");
-        }
-            
-        insertChannel = false;
     }
 
 
@@ -112,55 +124,68 @@ internal class HUDChatWindow_Path
 
         var channel = __instance._DefaultMode.ToString();
 
+        if (Plugin.AutoCleanEnabled.Value)
+        {
+            if (clearChat)
+            {
+                var chatLines = __instance._ChatMessages.Count;
+                __instance._ChatMessages.RemoveRange(0, chatLines);
+                clearChat = false;
+            }
+        }
+
         
 
-        if(channel != lastChannel)
+        if (channel != lastChannel)
         {
             textEmoji = textEmoji.Replace(lastChannel, channel);
             lastChannel = channel;
         }
-            
+
 
         if (chatLine != null)
         {
 
             chatLine.textComponent.text = textEmoji;
             chatLine.text = textEmoji;
-
-            if (channel == "Local")
+            if (Plugin.ChatColorEnabled.Value)
             {
-                chatLine.textComponent.color = colorLocal;
-                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
-            }
-            else if (channel == "Global")
-            {
-                chatLine.textComponent.color = colorGLobal;
-                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
-            }
-            else if (channel == "Team")
-            {
-                chatLine.textComponent.color = colorTeam;
-                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
-            }
-            else if (channel == "Whisper")
-            {
-                try
+                if (channel == "Local")
                 {
-                    var netWorkId = __instance._WhisperUser;
-                    __instance.TryGetUserCharacterName(netWorkId, out string userName);
-                    whispTo = userName;
-                } catch
-                {
-                    whispTo = "Whisper";
+                    chatLine.textComponent.color = colorLocal;
+                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
                 }
-                
-                chatLine.textComponent.color = colorWhisper;
-                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
-            }
-            else if (channel == "System")
-            {
-                chatLine.textComponent.color = colorSystem;
-                chatLine.MoveToEndOfLine(shift: false, ctrl: false);
+                else if (channel == "Global")
+                {
+                    chatLine.textComponent.color = colorGLobal;
+                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
+                }
+                else if (channel == "Team")
+                {
+                    chatLine.textComponent.color = colorTeam;
+                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
+                }
+                else if (channel == "Whisper")
+                {
+                    try
+                    {
+                        var netWorkId = __instance._WhisperUser;
+                        __instance.TryGetUserCharacterName(netWorkId, out string userName);
+                        whispTo = userName;
+                    }
+                    catch
+                    {
+                        whispTo = "Whisper";
+                    }
+
+                    chatLine.textComponent.color = colorWhisper;
+                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
+                }
+                else if (channel == "System")
+                {
+                    chatLine.textComponent.color = colorSystem;
+                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
+                }
             }
         }
 
