@@ -1,4 +1,4 @@
-﻿A client mod that adds channel name and change the color of the chat input text as the color of the cannel where you are typing. It also replace text string with emojis.
+A client mod that adds channel name and change the color of the chat input text as the color of the cannel where you are typing. It also replace text string with emojis.
 
 ## Configuration
 
@@ -7,7 +7,7 @@ Once the mod installed, a configuration file will be created in the \BepInEx\con
 **ChatLineColorMod.cfg**
 
 ```
-## Settings file was created by plugin ChatLineColorMod v1.3.0
+## Settings file was created by plugin ChatLineColorMod v1.3.2
 ## Plugin GUID: ChatLineColorMod
 
 [AutoCleanChat]
@@ -20,11 +20,18 @@ enabled = true
 ## Time interval in seconds in which the chat is cleared
 # Setting type: Int32
 # Default value: 3600
-interval = 60
+interval = 3600
+
+[ChatChannel]
+
+## Enable adds channel name in input where you are typing. This option will disable the ability to select a text or move within it.
+# Setting type: Boolean
+# Default value: true
+enabled = true
 
 [ChatColor]
 
-## Enable adds channel name and change the color of the chat input text as the color of the cannel where you are typing
+## Enable change the color of the chat input text as the color of the channel where you are typing
 # Setting type: Boolean
 # Default value: true
 enabled = true
@@ -35,6 +42,8 @@ enabled = true
 # Setting type: Boolean
 # Default value: true
 enabled = true
+
+
 ```
 
 
@@ -42,12 +51,15 @@ enabled = true
 |----------------|-------------------------------|-----------------------------------------------------------------|-----------------------------|
 |AutoCleanChat|`enabled `            | Enable AutoCleanChat replace              | true
 |AutoCleanChat        |`interval`            | Time interval in seconds in which the chat is cleared | 3600
-|ChatColor|`enabled `| Enable adds channel name and change the color of the chat input text as the color of the channel where you are typing.                  |true
+|ChatChannel|`enabled `| Enable adds channel name in input where you are typing. This option will disable the ability to select a text or move within it.                  |true
+|ChatColor|`enabled `| Enable change the color of the chat input text as the color of the channel where you are typing                  |true
 |Emojis|`enabled `| Enable Emojis replace                               |true
 
 ## Channel Name
 
  Adds channel name in the chat input where you are typing.
+
+ > This option will disable the ability to select a text or move within it.
 
 ![alt text](https://github.com/oscarpedrero/ChatLineColorMod/blob/master/imgs/local.png?raw=true)
 

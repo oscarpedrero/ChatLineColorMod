@@ -43,7 +43,7 @@ public class HUDChatWindow_Path
     public static void OnInputChanged_Prefix(ClientChatSystem __instance, ref string text)
     {
         
-        if (Plugin.ChatColorEnabled.Value)
+        if (Plugin.ChatChannelEnabled.Value)
         {
             if (text != textEmoji)
             {
@@ -134,6 +134,11 @@ public class HUDChatWindow_Path
             }
         }
 
+        if(channel == "Team")
+        {
+            channel = "Clan";
+        }
+
         
 
         if (channel != lastChannel)
@@ -153,17 +158,14 @@ public class HUDChatWindow_Path
                 if (channel == "Local")
                 {
                     chatLine.textComponent.color = colorLocal;
-                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
                 }
                 else if (channel == "Global")
                 {
                     chatLine.textComponent.color = colorGLobal;
-                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
                 }
-                else if (channel == "Team")
+                else if (channel == "Clan")
                 {
                     chatLine.textComponent.color = colorTeam;
-                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
                 }
                 else if (channel == "Whisper")
                 {
@@ -179,14 +181,14 @@ public class HUDChatWindow_Path
                     }
 
                     chatLine.textComponent.color = colorWhisper;
-                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
                 }
                 else if (channel == "System")
                 {
                     chatLine.textComponent.color = colorSystem;
-                    chatLine.MoveToEndOfLine(shift: false, ctrl: false);
                 }
             }
+
+            if (Plugin.ChatChannelEnabled.Value) chatLine.MoveToEndOfLine(shift: false, ctrl: false);
         }
 
     }
