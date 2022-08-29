@@ -34,8 +34,9 @@
 	<PackageReference Include="VRising.GameData" Version="0.3.3" />
 	<PackageReference Include="Wetstone" Version="1.1.0" />
 	<PackageReference Include="VRising.Unhollowed.Client" Version="0.5.*" />
-	<PackageReference Include="Fody" Version="6.6.3" PrivateAssets="All"/>
-	<PackageReference Include="ILMerge.Fody" Version="1.23.0"  PrivateAssets="All" />
+	<PackageReference Include="Fody" Version="6.6.3" PrivateAssets="All" />
+	<PackageReference Include="ILMerge.Fody" Version="1.23.0" PrivateAssets="All" />
+	  <PackageReference Include="UniverseLib.IL2CPP.Unhollower" Version="1.5.1" />
   </ItemGroup>
 
 	<ItemGroup>

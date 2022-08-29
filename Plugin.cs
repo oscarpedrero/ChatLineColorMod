@@ -4,6 +4,7 @@ using BepInEx.IL2CPP;
 using BepInEx.Logging;
 using ChatLineColorMod.Hooks;
 using ChatLineColorMod.Timers;
+using ChatLineColorMod.UI;
 using HarmonyLib;
 using System;
 using System.IO;
@@ -18,7 +19,7 @@ namespace ChatLineColorMod
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     [BepInDependency("xyz.molenzwiebel.wetstone")]
     [Reloadable]
-    public class Plugin : BasePlugin
+    public class Plugin : BasePlugin , IRunOnInitialized
     {
         public static ManualLogSource Logger;
 
@@ -33,6 +34,8 @@ namespace ChatLineColorMod
         private static AutoCleanTimer _autoCleanTimer;
 
         public static int _autocleanInterval { get; set; } = 0;
+        
+        public static bool UIInit { get; set; } = false;
 
         internal static Plugin Instance { get; private set; }
 
@@ -45,7 +48,10 @@ namespace ChatLineColorMod
             InitConfig();
             // Plugin startup logic
             GameData.OnInitialize += GameDataOnInitialize;
+            GameData.OnDestroy += GameDataOnDestroy;
             GameFrame.Initialize();
+            UIManager.Initialize();
+            UIInit = true;
             Log.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
         }
 
@@ -65,10 +71,16 @@ namespace ChatLineColorMod
         public override bool Unload()
         {
             GameData.OnInitialize -= GameDataOnInitialize;
+            GameData.OnDestroy -= GameDataOnDestroy;
             Config.Clear();
             GameFrame.Uninitialize();
             _harmony.UnpatchSelf();
             return true;
+        }
+
+        public void OnGameInitialized()
+        {
+            Log.LogInfo("Game has initialized!");
         }
 
         public static void StartAutoAnnouncer()
@@ -95,7 +107,7 @@ namespace ChatLineColorMod
 
         public static void StopAutoAnnouncer()
         {
-            _autoCleanTimer?.Stop();
+            _autoCleanTimer.Stop();
         }
 
 
@@ -104,6 +116,17 @@ namespace ChatLineColorMod
             Logger.LogInfo("GameData Init");
             _autoCleanTimer = new AutoCleanTimer();
             StartAutoAnnouncer();
+            UIManager.CreateAllPanels();
+            if (AutoCleanEnabled.Value) StartAutoAnnouncer();
+        }
+
+
+        private static void GameDataOnDestroy()
+        {
+            Logger.LogInfo("GameData Destroy");
+            StopAutoAnnouncer();
+            GameFrame.Uninitialize();
+            UIManager.DestroyAllPanels();
             if (AutoCleanEnabled.Value) StartAutoAnnouncer();
         }
     }

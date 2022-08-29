@@ -6,9 +6,7 @@ using System;
 using ChatLineColorMod.Utils;
 using System.Text.RegularExpressions;
 using System.Linq;
-using Unity.Entities;
-using ProjectM;
-using ProjectM.Network;
+using ChatLineColorMod.UI;
 
 namespace ChatLineColorMod.Hooks;
 
@@ -42,7 +40,6 @@ public class HUDChatWindow_Path
     [HarmonyPrefix]
     public static void OnInputChanged_Prefix(ClientChatSystem __instance, ref string text)
     {
-        
         if (Plugin.ChatChannelEnabled.Value)
         {
             if (text != textEmoji)
@@ -123,15 +120,23 @@ public class HUDChatWindow_Path
     {
 
         var channel = __instance._DefaultMode.ToString();
-
-        if (Plugin.AutoCleanEnabled.Value)
+        if (Plugin.UIInit)
         {
-            if (clearChat)
+            if (__instance._Hovered)
             {
-                var chatLines = __instance._ChatMessages.Count;
-                __instance._ChatMessages.RemoveRange(0, chatLines);
-                clearChat = false;
+                UIManager.ShowClearChatPanel();
             }
+            else
+            {
+                UIManager.HideClearChatPanel();
+            }
+        }
+        
+        if (clearChat)
+        {
+            var chatLines = __instance._ChatMessages.Count;
+            __instance._ChatMessages.RemoveRange(0, chatLines);
+            clearChat = false;
         }
 
         if(channel == "Team")
