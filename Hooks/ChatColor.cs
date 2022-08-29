@@ -120,7 +120,7 @@ public class HUDChatWindow_Path
     {
 
         var channel = __instance._DefaultMode.ToString();
-        if (Plugin.UIInit)
+        if (Plugin.UIInit && Plugin.ButtonCleanChat.Value)
         {
             if (__instance._Hovered)
             {

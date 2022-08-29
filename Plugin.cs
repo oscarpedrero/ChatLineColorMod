@@ -7,7 +7,6 @@ using ChatLineColorMod.Timers;
 using ChatLineColorMod.UI;
 using HarmonyLib;
 using System;
-using System.IO;
 using System.Reflection;
 using Unity.Entities;
 using VRising.GameData;
@@ -27,6 +26,7 @@ namespace ChatLineColorMod
 
         public static ConfigEntry<bool> ChatColorEnabled;
         public static ConfigEntry<bool> ChatChannelEnabled;
+        public static ConfigEntry<bool> ButtonCleanChat;
         public static ConfigEntry<bool> EmojiEnabled;
         public static ConfigEntry<bool> AutoCleanEnabled;
         public static ConfigEntry<int> AutoCleanInterval;
@@ -51,17 +51,18 @@ namespace ChatLineColorMod
             GameData.OnDestroy += GameDataOnDestroy;
             GameFrame.Initialize();
             UIManager.Initialize();
-            UIInit = true;
+            
             Log.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
         }
 
         private void InitConfig()
         {
 
+            ButtonCleanChat = Config.Bind("ButtonCleanChat", "enabled", true, "Enabled button when you hover in the chat window");
             ChatColorEnabled = Config.Bind("ChatColor", "enabled", true, "Enable change the color of the chat input text as the color of the channel where you are typing");
             ChatChannelEnabled = Config.Bind("ChatChannel", "enabled", true, "Enable adds channel name in input where you are typing. This option will disable the ability to select a text or move within it.");
             EmojiEnabled = Config.Bind("Emojis", "enabled", true, "Enable Emojis replace");
-            AutoCleanEnabled = Config.Bind("AutoCleanChat", "enabled", true, "Enable AutoCleanChat replace");
+            AutoCleanEnabled = Config.Bind("AutoCleanChat", "enabled", false, "Enable AutoCleanChat");
             AutoCleanInterval = Config.Bind("AutoCleanChat", "interval", 3600, "Time interval in seconds in which the chat is cleared");
             
             if(AutoCleanEnabled.Value) _autocleanInterval = AutoCleanInterval.Value;
@@ -113,6 +114,7 @@ namespace ChatLineColorMod
 
         private static void GameDataOnInitialize(World world)
         {
+            UIInit = true;
             Logger.LogInfo("GameData Init");
             _autoCleanTimer = new AutoCleanTimer();
             StartAutoAnnouncer();
