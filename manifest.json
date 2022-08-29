@@ -1,6 +1,6 @@
 ﻿{
   "name": "ChatLineColorMod",
-  "version_number": "1.3.5",
+  "version_number": "1.3.6",
   "website_url": "https://github.com/oscarpedrero/ChatLineColorMod",
   "description": "A client mod that adds extra functionality to the chat window.",
   "dependencies": [

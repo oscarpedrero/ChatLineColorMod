@@ -117,7 +117,6 @@ namespace ChatLineColorMod
             UIInit = true;
             Logger.LogInfo("GameData Init");
             _autoCleanTimer = new AutoCleanTimer();
-            StartAutoAnnouncer();
             UIManager.CreateAllPanels();
             if (AutoCleanEnabled.Value) StartAutoAnnouncer();
         }

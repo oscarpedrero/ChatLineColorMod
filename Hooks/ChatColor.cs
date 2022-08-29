@@ -131,13 +131,16 @@ public class HUDChatWindow_Path
                 UIManager.HideClearChatPanel();
             }
         }
-        
-        if (clearChat)
+        if (Plugin.AutoCleanEnabled.Value || Plugin.ButtonCleanChat.Value)
         {
-            var chatLines = __instance._ChatMessages.Count;
-            __instance._ChatMessages.RemoveRange(0, chatLines);
-            clearChat = false;
+            if (clearChat)
+            {
+                var chatLines = __instance._ChatMessages.Count;
+                __instance._ChatMessages.RemoveRange(0, chatLines);
+                clearChat = false;
+            }
         }
+        
 
         if(channel == "Team")
         {
