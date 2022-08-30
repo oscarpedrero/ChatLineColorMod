@@ -32,14 +32,14 @@ namespace ChatLineColorMod.UI.Panels
 
         public override int MinHeight => 40;
 
-        public static int PositionWidth = (Screen.width * -1);
-        public static int PositionHeight = (Screen.height * -1);
+        public static float PositionX = ((Screen.width * -545) / 2560) - 45;
+        public static float PositionY = ((Screen.height * 60) / 1440);
 
         public override Vector2 DefaultAnchorMin => new Vector2(0.5f, 1f);
 
         public override Vector2 DefaultAnchorMax => new Vector2(0.5f, 1f);
 
-        public override Vector2 DefaultPosition => new Vector2(-545, 60);
+        public override Vector2 DefaultPosition => new Vector2(PositionX, PositionY);
 
         public override bool CanDragAndResize => false;
 
