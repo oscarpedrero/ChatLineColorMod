@@ -17,6 +17,7 @@ public class HUDChatWindow_Path
     private static TMP_InputField chatLine = null;
 
     public static bool clearChat { get; set; } = false;
+    public static bool testLoadChat { get; set; } = false;
 
     private static Color colorLocal = new(218 / 255f, 201 / 255f, 192 / 255f);
     private static Color colorGLobal = new(153 / 255f, 204 / 255f, 255 / 255f);
@@ -179,9 +180,7 @@ public class HUDChatWindow_Path
                 {
                     try
                     {
-                        var netWorkId = __instance._WhisperUser;
-                        __instance.TryGetUserCharacterName(netWorkId, out string userName);
-                        whispTo = userName;
+                        whispTo = __instance._WhisperUserName;
                     }
                     catch
                     {

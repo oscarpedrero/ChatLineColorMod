@@ -1,6 +1,6 @@
 ﻿using System;
 using Unity.Entities;
-using VRising.GameData;
+using Bloodstone.API;
 
 namespace ChatLineColorMod.Timers
 {
@@ -36,7 +36,7 @@ namespace ChatLineColorMod.Timers
 
         private void GameFrame_OnUpdate()
         {
-            Update(GameData.World);
+            Update(VWorld.Client);
         }
 
         private void Update(World world)

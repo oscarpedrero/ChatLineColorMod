@@ -1,3 +1,4 @@
+# ChatLineColorMod - Mod Client for V Rising ( Gloomrot update )
 
 A client mod that adds extra functionality to the chat window:
 

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Il2CppInterop.Runtime.Injection;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using UnhollowerRuntimeLib;
 using UnityEngine;
 
 namespace ChatLineColorMod.Timers

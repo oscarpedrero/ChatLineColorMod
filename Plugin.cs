@@ -1,6 +1,6 @@
 ﻿using BepInEx;
+using BepInEx.Unity.IL2CPP;
 using BepInEx.Configuration;
-using BepInEx.IL2CPP;
 using BepInEx.Logging;
 using ChatLineColorMod.Hooks;
 using ChatLineColorMod.Timers;
@@ -9,14 +9,13 @@ using HarmonyLib;
 using System;
 using System.Reflection;
 using Unity.Entities;
-using VRising.GameData;
-using Wetstone.API;
+using Bloodstone.API;
 
 namespace ChatLineColorMod
 {
-
-    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-    [BepInDependency("xyz.molenzwiebel.wetstone")]
+    [BepInProcess("VRising.exe")]
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+    [BepInDependency("gg.deca.Bloodstone")]
     [Reloadable]
     public class Plugin : BasePlugin , IRunOnInitialized
     {
@@ -43,16 +42,16 @@ namespace ChatLineColorMod
         {
             Instance = this;
             Logger = Log;
-            _harmony = new Harmony(PluginInfo.PLUGIN_GUID);
+            _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
             _harmony.PatchAll(Assembly.GetExecutingAssembly());
             InitConfig();
             // Plugin startup logic
-            GameData.OnInitialize += GameDataOnInitialize;
-            GameData.OnDestroy += GameDataOnDestroy;
+            //GameData.OnInitialize += GameDataOnInitialize;
+            //GameData.OnDestroy += GameDataOnDestroy;
             GameFrame.Initialize();
             UIManager.Initialize();
             
-            Log.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
+            Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         }
 
         private void InitConfig()
@@ -71,8 +70,8 @@ namespace ChatLineColorMod
 
         public override bool Unload()
         {
-            GameData.OnInitialize -= GameDataOnInitialize;
-            GameData.OnDestroy -= GameDataOnDestroy;
+            //GameData.OnInitialize -= GameDataOnInitialize;
+            //GameData.OnDestroy -= GameDataOnDestroy;
             Config.Clear();
             GameFrame.Uninitialize();
             _harmony.UnpatchSelf();
@@ -112,7 +111,7 @@ namespace ChatLineColorMod
         }
 
 
-        private static void GameDataOnInitialize(World world)
+        public static void GameDataOnInitialize(World world)
         {
             UIInit = true;
             Logger.LogInfo("GameData Init");

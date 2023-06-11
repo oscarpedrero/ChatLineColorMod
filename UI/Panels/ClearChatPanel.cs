@@ -32,8 +32,8 @@ namespace ChatLineColorMod.UI.Panels
 
         public override int MinHeight => 40;
 
-        public static float PositionX = ((Screen.width * -545) / 2560) - 45;
-        public static float PositionY = ((Screen.height * 60) / 1440);
+        public static float PositionX = ((Screen.width * -545) / 2560);
+        public static float PositionY = ((Screen.height * 60) / 1440) -150;
 
         public override Vector2 DefaultAnchorMin => new Vector2(0.5f, 1f);
 

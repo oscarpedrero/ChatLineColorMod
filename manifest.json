@@ -1,10 +1,10 @@
 ﻿{
   "name": "ChatLineColorMod",
-  "version_number": "1.3.8",
+  "version_number": "2.0.0",
   "website_url": "https://github.com/oscarpedrero/ChatLineColorMod",
   "description": "A client mod that adds extra functionality to the chat window.",
   "dependencies": [
-    "BepInEx-BepInExPack_V_Rising-1.0.0",
-    "molenzwiebel-Wetstone-1.2.0"
+    "BepInEx-BepInExPack_V_Rising-1.668.5",
+    "deca-Bloodstone-0.1.4"
   ]
 }
